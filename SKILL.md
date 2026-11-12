@@ -111,6 +111,19 @@ decisions:              # 选型决策：什么时候用什么、忌什么
     avoid: Drawer
     reason: 抽屉只用于只读详情
 
+probes:                   # 语义 → 本实现的探测（规则不绑死组件名；换组件库改这里）
+  static:                 # check 静态扫描
+    field_tag: Field              # 表单行封装组件
+    field_inline_marker: layout="inline"
+    grid_tag: FormGrid
+    modal_tag: Modal
+    drawer_tag: Drawer
+    submit_tag: Button
+    submit_attr: type="submit"
+  runtime:                # measure 渲染后采样
+    form_row: .form-row
+    submit_button: 'button[type="submit"]'
+
 policy:                 # 机器执行的硬约束
   import:               # 页面直引组件白名单，其余走封装
     allow: [input, button, select, textarea, label, table, tabs]
@@ -147,6 +160,7 @@ rules:                  # 自然语言规则，带来源与样例
 - **每条规则必须可证伪**：fixtures 反例必报、正例必沉默，`rules doctor` 验证，不过就进不了包。
 - 没有来源（evidence）的规则不要写；D 类（模型自拟）默认只能 warn。
 - 数值不变量从**已批准实现的分布**推导，不是从单张截图。
+- **语义与实现解耦**：探测组件名/选择器写在 `probes`，spacing/geometry/decisions 语义层不随组件库变。
 - pattern 双轨核对：`pattern-shape`（check 静态读源码，扫 `**/*Modal*.vue`、`**/*Form*.vue`，查骨架/forbid/action 数）+ `pattern-geometry`（measure 读真实布局，invariants 逐条判定；`min_breakpoint` 以下跳过；行距只量相邻兄弟行）。两层读同一份 invariants。
 - 改 pack 流程：改 pack.yaml → 引擎仓库提交（若 pack 随引擎仓库走）→ `sync-vendor.sh` 同步副本 → `pack add` 重装更新 lock → 跑全部门槛。
 
