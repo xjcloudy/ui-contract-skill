@@ -20,7 +20,10 @@ mkdir -p .ui-contract
 node tools/ui-contract/bin/ui-contract.mjs pack add github.com/xjcloudy/ui-contract#admin-heavy@1.4.0
 # 5) 存量项目先记基线
 node tools/ui-contract/bin/ui-contract.mjs check --update-baseline
+node tools/ui-contract/bin/ui-contract.mjs rules gallery --check-json /tmp/check.json  # 规则可视化页
 ```
+
+gallery：自包含 HTML（rules-gallery.html），每条规则一卡——断言/为什么/来源徽章/正反样例并排/本项目实际命中 `文件:行`（`--check-json` 传 `check --format json` 的输出）。向用户解释规则或评审规则增改时，先生成这个页面再给结论。
 
 最小 `config.yaml`：
 
